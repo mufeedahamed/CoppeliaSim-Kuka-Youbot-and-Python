@@ -122,17 +122,38 @@ rotate_robot(client, 0)
 holedummy_handle = sim.getObjectHandle('holedummy')
 holeobject_position = sim.getObjectPosition(holedummy_handle, -1)
 
-# Move IK target to the object position
-sim.setObjectPosition(target_handle, -1, holeobject_position)
+holedummy_handle1 = sim.getObjectHandle('holedummy1')
+holeobject_position1 = sim.getObjectPosition(holedummy_handle1, -1)
 
+holedummy_handle2 = sim.getObjectHandle('holedummy2')
+holeobject_position2 = sim.getObjectPosition(holedummy_handle2, -1)
+
+# Move IK target to the object position
+sim.setObjectPosition(target_handle, -1, holeobject_position1)
 sim.wait(30)
+sim.setObjectPosition(target_handle, -1, holeobject_position2)
+sim.wait(15)
+sim.setObjectPosition(target_handle, -1, holeobject_position)
+sim.wait(15)
+
+
+velocity = -0.05  # Adjust this value as necessary
+for joint in wheelJoints:
+    sim.setJointTargetVelocity(joint, velocity)
+
+# Let the robot move for a short duration
+sim.wait(20)  # Adjust the time as necessary
+for joint in wheelJoints:
+    sim.setJointTargetVelocity(joint, 0)
+    
+
 sim.setObjectParent(connectorHandle, -1, True)  # Parent it to the gripper
 
 sim.setJointTargetPosition(gripperHandles[0], 0)
 sim.setJointTargetPosition(gripperHandles[1], 0)
 
 sim.setObjectPosition(target_handle, 1, [-0.500,-1.600,0.296])
-sim.wait(40)
+sim.wait(60)
 
 #Stop simulation
 sim.stopSimulation() 
